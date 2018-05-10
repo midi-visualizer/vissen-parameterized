@@ -13,6 +13,10 @@ module TestHelper
 
     DEFAULT = rand
   end
+
+  class DSLMock
+    extend Vissen::Parameterized::DSL
+  end
 end
 
 require 'minitest/autorun'
