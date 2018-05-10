@@ -34,12 +34,14 @@ describe Vissen::Parameterized::DSL do
       assert_equal vec_klass::DEFAULT, parameters[:vec].value
     end
   end
-  
+
   describe '.class_output' do
+    i_suck_and_my_tests_are_order_dependent!
+
     it 'raises a RuntimeError if no outut is defined' do
       assert_raises(RuntimeError) { subject.class_output }
     end
-    
+
     it 'returns a new instance of the output class' do
       subject.output real_klass
       assert_kind_of real_klass, subject.class_output
