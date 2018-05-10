@@ -13,7 +13,7 @@ module Vissen
       class Real
         include Value
 
-        # @return see Value
+        # @return [Float] see Value
         DEFAULT = 0.0
 
         # @raise  [TypeError] if the given object cannot be coerced into a
