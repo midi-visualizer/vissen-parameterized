@@ -1,8 +1,9 @@
-# Vissen::Parameterized
+# 🥀 Vissen Parameterized
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/vissen/parameterized`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
+[![Gem Version](https://badge.fury.io/rb/vissen-parameterized.svg)](https://badge.fury.io/rb/vissen-parameterized)
+[![Build Status](https://travis-ci.org/midi-visualizer/vissen-parameterized.svg?branch=master)](https://travis-ci.org/midi-visualizer/vissen-parameterized)
+[![Inline docs](http://inch-ci.org/github/midi-visualizer/vissen-parameterized.svg?branch=master)](http://inch-ci.org/github/midi-visualizer/vissen-parameterized)
+[![Documentation](http://img.shields.io/badge/docs-rdoc.info-blue.svg)](http://www.rubydoc.info/gems/vissen-parameterized/)
 
 ## Installation
 
@@ -32,7 +33,7 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/vissen-parameterized.
+Bug reports and pull requests are welcome on GitHub at https://github.com/midi-visualizer/vissen-parameterized.
 
 ## License
 
