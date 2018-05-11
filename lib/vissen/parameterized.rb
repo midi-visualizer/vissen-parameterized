@@ -21,6 +21,12 @@ module Vissen
 
     def_delegators :@_value, :value
 
+    def initialize(*)
+      super
+
+      @_visited = false
+    end
+
     def call(_parameters)
       raise NotImplementedError
     end
@@ -37,16 +43,24 @@ module Vissen
       @_value = value
     end
 
-    def tainted?(transaction_id)
-      return @_value.tainted?(transaction_id) if @_value.tested? transaction_id
+    def untaint!
+      @_visited = false
+      # ASUMPTION: if the value is untainted the params must also be unchanged.
+      return unless @_value.tainted?
 
-      @_value.tainted? transaction_id
+      @_value.untaint!
+      @_params.each { |_, param| param.untaint! }
+    end
+
+    def tainted?
+      return @_value.tainted? if @_visited
+      @_visited = true
 
       params_tainted =
         @_params.reduce(false) do |a, (_, param)|
-          param.tainted?(transaction_id) || a
+          param.tainted? || a
         end
-p params_tainted
+
       # Only update if the parameters have been tainted
       return false unless params_tainted
 

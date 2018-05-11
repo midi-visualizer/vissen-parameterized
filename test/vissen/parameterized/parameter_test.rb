@@ -9,9 +9,6 @@ describe Vissen::Parameterized::Parameter do
   let(:parameter)   { subject.new value_klass }
   let(:target)      { value_klass.new 42 }
 
-  let(:first_transaction_id)  { 1 }
-  let(:second_transaction_id) { first_transaction_id + 1 }
-
   describe '.new' do
     it 'creates a constant parameter' do
       assert parameter.constant?
@@ -19,10 +16,6 @@ describe Vissen::Parameterized::Parameter do
 
     it 'uses the default value of the given type' do
       assert_equal value_klass::DEFAULT, parameter.value
-    end
-
-    it 'is initially tainted' do
-      assert parameter.tainted? first_transaction_id
     end
   end
 

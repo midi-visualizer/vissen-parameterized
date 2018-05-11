@@ -19,8 +19,8 @@ module Vissen
 
         # @param  initial_value [Array<#to_f>] the initial value to use.
         def initialize(initial_value = nil)
-          @value   = DEFAULT.dup
-          @tainted = -1
+          @value = DEFAULT.dup
+          taint!
 
           write initial_value if initial_value
         end
