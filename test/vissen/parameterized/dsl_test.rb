@@ -3,7 +3,7 @@
 require 'test_helper'
 
 describe Vissen::Parameterized::DSL do
-  subject { TestHelper::DSLMock }
+  subject { TestHelper::DSLMock.dup }
 
   let(:parameter_klass) { Vissen::Parameterized::Parameter }
   let(:real_klass)      { Vissen::Parameterized::Value::Real }
@@ -36,8 +36,6 @@ describe Vissen::Parameterized::DSL do
   end
 
   describe '.class_output' do
-    i_suck_and_my_tests_are_order_dependent!
-
     it 'raises a RuntimeError if no outut is defined' do
       assert_raises(RuntimeError) { subject.class_output }
     end
@@ -45,6 +43,23 @@ describe Vissen::Parameterized::DSL do
     it 'returns a new instance of the output class' do
       subject.output real_klass
       assert_kind_of real_klass, subject.class_output
+    end
+  end
+
+  describe '.new' do
+    before do
+      subject.output real_klass
+      subject.param real: real_klass
+    end
+
+    let(:instance) { subject.new }
+
+    it 'sets the output of the new instance' do
+      assert_equal real_klass::DEFAULT, instance.value
+    end
+
+    it 'sets the parameters of the new instance' do
+      assert_equal real_klass::DEFAULT, instance.parameters[:real].value
     end
   end
 end

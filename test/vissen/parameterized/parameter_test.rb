@@ -9,6 +9,9 @@ describe Vissen::Parameterized::Parameter do
   let(:parameter)   { subject.new value_klass }
   let(:target)      { value_klass.new 42 }
 
+  let(:first_transaction_id)  { 1 }
+  let(:second_transaction_id) { first_transaction_id + 1 }
+
   describe '.new' do
     it 'creates a constant parameter' do
       assert parameter.constant?
@@ -19,7 +22,7 @@ describe Vissen::Parameterized::Parameter do
     end
 
     it 'is initially tainted' do
-      assert parameter.tainted?
+      assert parameter.tainted? first_transaction_id
     end
   end
 
@@ -36,14 +39,6 @@ describe Vissen::Parameterized::Parameter do
       it 'stores a new constant value' do
         parameter.set 42
         assert_equal 42.0, parameter.value
-      end
-    end
-
-    describe '#tainted?' do
-      it 'returns the state of the constant value' do
-        assert parameter.tainted?
-        parameter.untaint!
-        refute parameter.tainted?
       end
     end
 
@@ -92,15 +87,6 @@ describe Vissen::Parameterized::Parameter do
         parameter.set 4.2
         assert parameter.constant?
         assert_equal 4.2, parameter.value
-      end
-    end
-
-    describe '#tainted?' do
-      it 'returns the state of the target' do
-        assert parameter.tainted?
-        parameter.untaint!
-        refute parameter.tainted?
-        refute target.tainted?
       end
     end
 

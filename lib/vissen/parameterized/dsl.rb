@@ -45,6 +45,16 @@ module Vissen
         raise 'No output class defined' unless defined? @_output
         @_output.new
       end
+
+      def self.extended(mod)
+        return unless mod <= Parameterized
+        mod.define_singleton_method :new do |*args|
+          obj = super(*args)
+          obj.output = class_output
+          obj.parameters = class_parameters
+          obj
+        end
+      end
     end
   end
 end

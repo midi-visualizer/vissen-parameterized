@@ -20,7 +20,7 @@ module Vissen
         # @param  initial_value [Array<#to_f>] the initial value to use.
         def initialize(initial_value = nil)
           @value   = DEFAULT.dup
-          @tainted = true
+          @tainted = -1
 
           write initial_value if initial_value
         end
@@ -34,10 +34,9 @@ module Vissen
         def write(new_value)
           return if @value == new_value
 
-          @tainted = true
-
           @value[0] = Float(new_value[0])
           @value[1] = Float(new_value[1])
+          taint!
           nil
         rescue NoMethodError
           raise TypeError, 'The given object must support #[]'

@@ -5,6 +5,8 @@ require 'test_helper'
 describe Vissen::Parameterized::Value::Vec do
   subject { Vissen::Parameterized::Value::Vec }
   let(:vec) { subject.new }
+  let(:first_transaction_id)  { 1 }
+  let(:second_transaction_id) { first_transaction_id + 1 }
 
   describe '.new' do
     it 'defaults to [0.0, 0.0]' do
@@ -17,7 +19,7 @@ describe Vissen::Parameterized::Value::Vec do
     end
 
     it 'marks the value as tainted' do
-      assert vec.tainted?
+      assert vec.tainted? first_transaction_id
     end
   end
 
@@ -41,15 +43,15 @@ describe Vissen::Parameterized::Value::Vec do
     end
 
     it 'taints untainted values' do
-      vec.untaint!
+      refute vec.tainted? second_transaction_id
       vec.write [rand, rand]
-      assert vec.tainted?
+      assert vec.tainted? second_transaction_id
     end
 
     it 'does not taint the value if the same value is written' do
-      vec.untaint!
+      refute vec.tainted? second_transaction_id
       vec.write vec.value
-      refute vec.tainted?
+      refute vec.tainted? second_transaction_id
     end
 
     it 'raises a TypeError for invalid arrays' do

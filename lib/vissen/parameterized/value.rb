@@ -27,10 +27,12 @@ module Vissen
       #   called without arguments, or with nil.
       DEFAULT = nil
 
+      TRANSACTION_ID_MASK = 0x7FFF
+
       # @param  value [Object] the initial value to use. Ignored if nil.
       def initialize(value = nil)
         @value   = nil
-        @tainted = true
+        @tainted = -1
 
         write(value.nil? ? self.class::DEFAULT : value)
       end
@@ -41,26 +43,38 @@ module Vissen
       # @param  new_value [Object] the new value to write.
       # @return [nil]
       def write(new_value)
-        return if new_value == @value
-
-        @tainted = true
-        @value   = new_value
-        nil
+        return false if new_value == @value
+        @value = new_value
+        taint!
+        true
       end
 
       # @return [true] if the value has been written to since the last call to
       #   `#untaint!`.
       # @return [false] otherwise.
-      def tainted?
-        @tainted
+      def tainted?(transaction_id)
+        return true if @tainted.negative? && -@tainted == transaction_id
+
+        @tainted = transaction_id
+        false
       end
 
-      # Marks the value as untainted. This can be used to signify that the value
-      # has been accounted for, in some way.
-      #
-      # @return [false]
-      def untaint!
-        @tainted = false
+      def tested?(transaction_id)
+        @tainted == transaction_id || @tainted == -transaction_id
+      end
+
+      def next_transaction_id(current_id = 0)
+        ((current_id + 1) & TRANSACTION_ID_MASK).tap do |v|
+          break v + 1 if v.zero?
+        end
+      end
+
+      module_function :next_transaction_id
+
+      protected
+
+      def taint!
+        @tainted = -@tainted unless @tainted.negative?
       end
     end
   end

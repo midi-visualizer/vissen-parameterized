@@ -15,7 +15,12 @@ module TestHelper
   end
 
   class DSLMock
-    extend Vissen::Parameterized::DSL
+    include Vissen::Parameterized
+    extend  Vissen::Parameterized::DSL
+  end
+
+  class ParameterizedMock
+    include Vissen::Parameterized
   end
 end
 
