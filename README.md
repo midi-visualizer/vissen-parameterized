@@ -23,7 +23,38 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+```ruby
+class Doubler
+  include Parameterized
+  extend  Parameterized::DSL
+  
+  param input: Value::Real
+  output Value::Real
+  
+  def call(params)
+    params.input * 2
+  end
+end
+
+external_value = Value::Real.new 21
+
+doubler = Doubler.new
+doubler.bind :input, external_value
+
+# A tainted check is needed before reading the value
+doubler.tainted? # => true
+doubler.value # => 42.0
+
+# Make sure untaint! is called before any value is changed
+doubler.untaint!
+
+external_value.set 4.5
+
+# Before the taint check the old value is returned
+doubler.value # => 42.0
+doubler.tainted? # => true
+doubler.value # => 9.0
+```
 
 ## Development
 
