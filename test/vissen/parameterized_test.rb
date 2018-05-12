@@ -8,6 +8,7 @@ describe Vissen::Parameterized do
   let(:real_class) { Vissen::Parameterized::Value::Real }
   let(:param_a)    { Vissen::Parameterized::Parameter.new real_class }
   let(:param_b)    { Vissen::Parameterized::Parameter.new real_class }
+  let(:target)     { real_class.new 3 }
   let(:params)     { { a: param_a, b: param_b } }
   let(:output)     { real_class.new }
 
@@ -99,6 +100,22 @@ describe Vissen::Parameterized do
 
       assert root.tainted?
       assert_equal(-3, root.value)
+    end
+  end
+
+  describe '#bind' do
+    before do
+      parameterized.parameters = params
+      parameterized.output = output
+    end
+
+    it 'binds the parameter to the target' do
+      parameterized.bind :a, target
+      refute param_a.constant?
+    end
+
+    it 'raises a KeyError for unknown parameters' do
+      assert_raises(KeyError) { parameterized.bind :unknown, target }
     end
   end
 end

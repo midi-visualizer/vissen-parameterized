@@ -36,18 +36,6 @@ module Vissen
       raise NotImplementedError
     end
 
-    def parameters=(parameters)
-      @_params = parameters
-    end
-
-    def parameters
-      @_params
-    end
-
-    def output=(value)
-      @_value = value
-    end
-
     # Marks the output value and all input parameters as untainted.
     #
     # @return [false]
@@ -84,6 +72,30 @@ module Vissen
       return false unless params_tainted
 
       @_value.write call(@_params)
+    end
+
+    # Binds a parameter to a target value.
+    #
+    # @see    Parameter#bind
+    # @raise  [KeyError] if the parameter is not found.
+    #
+    # @param  param [Symbol] the parameter to bind.
+    # @param  target [#value] the value object to bind to.
+    # @return [Parameter] the parameter that was bound.
+    def bind(param, target)
+      @_params.fetch(param).bind target
+    end
+
+    def parameters=(parameters)
+      @_params = parameters
+    end
+
+    def parameters
+      @_params
+    end
+
+    def output=(value)
+      @_value = value
     end
   end
 end
