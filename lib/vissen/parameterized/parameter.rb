@@ -67,6 +67,13 @@ module Vissen
         @target = obj
         self
       end
+
+      # Copies the value of the target to the internal constant and unbinds from
+      # the target.
+      def unbind
+        raise 'cannot unbind constant' if constant?
+        set @target.value
+      end
     end
   end
 end

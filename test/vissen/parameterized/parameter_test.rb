@@ -40,6 +40,12 @@ describe Vissen::Parameterized::Parameter do
         assert_raises(RuntimeError) { parameter.target }
       end
     end
+
+    describe '#unbind' do
+      it 'raises a runtime error' do
+        assert_raises(RuntimeError) { parameter.unbind }
+      end
+    end
   end
 
   describe '#bind' do
@@ -85,6 +91,14 @@ describe Vissen::Parameterized::Parameter do
 
     describe '#value' do
       it 'returns the value of the target' do
+        assert_equal target.value, parameter.value
+      end
+    end
+
+    describe '#unbind' do
+      it 'copies the value of the target to the constant' do
+        parameter.unbind
+        assert parameter.constant?
         assert_equal target.value, parameter.value
       end
     end
