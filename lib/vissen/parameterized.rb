@@ -3,6 +3,7 @@
 require 'forwardable'
 
 require 'vissen/parameterized/version'
+require 'vissen/parameterized/accessor'
 require 'vissen/parameterized/value'
 require 'vissen/parameterized/value/real'
 require 'vissen/parameterized/value/vec'
@@ -20,18 +21,25 @@ module Vissen
 
     def_delegators :@_value, :value
 
+    private_constant :Accessor
+
     # Forwards all parameters to super.
+    #
+    # @param  args [Array<Object>] the arguments to forward to super.
+    # @param  parameters [Hash<Symbol, Parameter>] the input parameters.
+    # @param  output [Value] the output value object.
     def initialize(*args, parameters:, output:)
       super(*args)
 
-      @_visited = false
-      @_params  = parameters
-      @_value   = output
+      @_visited  = false
+      @_params   = parameters
+      @_value    = output
+      @_accessor = Accessor.new parameters
     end
 
     # @raise  [NotImplementedError] if not implemented by descendent.
     #
-    # @param  _parameters [Hash] the parameters of the parameterized object.
+    # @param  _parameters [Accessor] the parameters of the parameterized object.
     # @return [Object] an object compatible with the output value type should be
     #   returned.
     def call(_parameters)
@@ -73,7 +81,7 @@ module Vissen
 
       return false unless params_tainted
 
-      @_value.write call(@_params)
+      @_value.write call(@_accessor)
     end
 
     # Binds a parameter to a target value.
@@ -88,8 +96,12 @@ module Vissen
       @_params.fetch(param).bind target
     end
 
+    # @return [Accessor] a proxy object that provides access to parameters via
+    #   method calls instead of hash lookups.
     def parameters
-      @_params
+      @_accessor
     end
+
+    alias params parameters
   end
 end

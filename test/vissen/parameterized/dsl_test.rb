@@ -59,7 +59,7 @@ describe Vissen::Parameterized::DSL do
     end
 
     it 'sets the parameters of the new instance' do
-      assert_equal real_klass::DEFAULT, instance.parameters[:real].value
+      assert_equal real_klass::DEFAULT, instance.parameters.real
     end
   end
 end

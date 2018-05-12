@@ -29,19 +29,16 @@ describe Vissen::Parameterized do
     end
   end
 
-  # describe '#parameters=' do
-  #   it 'accepts a hash of parameters' do
-  #     parameterized.parameters = params
-  #     assert_same params, parameterized.parameters
-  #   end
-  # end
+  describe '#parameters' do
+    it 'returns a parameter accessor' do
+      accessor = parameterized.parameters
+
+      assert_same param_a.value, accessor.a
+      assert_same param_b.value, accessor.b
+    end
+  end
 
   describe '#untaint!' do
-    # before do
-    #   parameterized.parameters = params
-    #   parameterized.output = output
-    # end
-
     it 'untaints the parameters' do
       assert param_a.tainted?
       assert param_b.tainted?
@@ -58,12 +55,10 @@ describe Vissen::Parameterized do
   describe '#tainted?' do
     before do
       @called = false
-      # parameterized.parameters = params
-      # parameterized.output = output
       ctx = self
       parameterized.define_singleton_method :call do |params|
         ctx.instance_variable_set :@called, true
-        params[:a].value + params[:b].value
+        params.a + params.b
       end
     end
 
@@ -93,8 +88,9 @@ describe Vissen::Parameterized do
     end
 
     it 'works when chaining multiple objects' do
-      root = subject.new parameters: { c: parameterized }, output: real_class.new
-      root.define_singleton_method(:call) { |params| -params[:c].value }
+      root = subject.new parameters: { c: parameterized },
+                         output: real_class.new
+      root.define_singleton_method(:call) { |params| -params.c }
 
       assert root.tainted?
       assert_equal(-3, root.value)
@@ -102,11 +98,6 @@ describe Vissen::Parameterized do
   end
 
   describe '#bind' do
-    # before do
-    #   parameterized.parameters = params
-    #   parameterized.output = output
-    # end
-
     it 'binds the parameter to the target' do
       parameterized.bind :a, target
       refute param_a.constant?
