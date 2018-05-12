@@ -2,6 +2,8 @@
 
 module Vissen
   module Parameterized
+    # This module provides a DSL for defining input parameters and output values
+    # for parameterized objects.
     #
     # == Usage
     #
@@ -46,6 +48,11 @@ module Vissen
         @_output.new
       end
 
+      # Dynamically adds a `.new` method to the extending module (or class), if
+      # it is a descendent of Parameterized, that initializes the input
+      # parameters and the output value.
+      #
+      # @param  mod [Module] the module that extended the DSL.
       def self.extended(mod)
         return unless mod <= Parameterized
         mod.define_singleton_method :new do |*args|

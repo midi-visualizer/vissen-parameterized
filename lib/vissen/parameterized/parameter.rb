@@ -35,7 +35,7 @@ module Vissen
       end
 
       # @return [false] if the parameter is bound to a value object.
-      # @reutrn [true] otherwise.
+      # @return [true] otherwise.
       def constant?
         @constant.equal? @target
       end
