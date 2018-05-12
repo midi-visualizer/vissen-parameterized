@@ -56,10 +56,7 @@ module Vissen
       def self.extended(mod)
         return unless mod <= Parameterized
         mod.define_singleton_method :new do |*args|
-          obj = super(*args)
-          obj.output = class_output
-          obj.parameters = class_parameters
-          obj
+          super(*args, parameters: class_parameters, output: class_output)
         end
       end
     end

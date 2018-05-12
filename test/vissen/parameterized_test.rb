@@ -12,7 +12,7 @@ describe Vissen::Parameterized do
   let(:params)     { { a: param_a, b: param_b } }
   let(:output)     { real_class.new }
 
-  let(:parameterized) { subject.new }
+  let(:parameterized) { subject.new parameters: params, output: output }
 
   before do
     param_a.set 1
@@ -29,18 +29,18 @@ describe Vissen::Parameterized do
     end
   end
 
-  describe '#parameters=' do
-    it 'accepts a hash of parameters' do
-      parameterized.parameters = params
-      assert_same params, parameterized.parameters
-    end
-  end
+  # describe '#parameters=' do
+  #   it 'accepts a hash of parameters' do
+  #     parameterized.parameters = params
+  #     assert_same params, parameterized.parameters
+  #   end
+  # end
 
   describe '#untaint!' do
-    before do
-      parameterized.parameters = params
-      parameterized.output = output
-    end
+    # before do
+    #   parameterized.parameters = params
+    #   parameterized.output = output
+    # end
 
     it 'untaints the parameters' do
       assert param_a.tainted?
@@ -58,8 +58,8 @@ describe Vissen::Parameterized do
   describe '#tainted?' do
     before do
       @called = false
-      parameterized.parameters = params
-      parameterized.output = output
+      # parameterized.parameters = params
+      # parameterized.output = output
       ctx = self
       parameterized.define_singleton_method :call do |params|
         ctx.instance_variable_set :@called, true
@@ -93,10 +93,8 @@ describe Vissen::Parameterized do
     end
 
     it 'works when chaining multiple objects' do
-      root = subject.new
-      root.output = real_class.new
+      root = subject.new parameters: { c: parameterized }, output: real_class.new
       root.define_singleton_method(:call) { |params| -params[:c].value }
-      root.parameters = { c: parameterized }
 
       assert root.tainted?
       assert_equal(-3, root.value)
@@ -104,10 +102,10 @@ describe Vissen::Parameterized do
   end
 
   describe '#bind' do
-    before do
-      parameterized.parameters = params
-      parameterized.output = output
-    end
+    # before do
+    #   parameterized.parameters = params
+    #   parameterized.output = output
+    # end
 
     it 'binds the parameter to the target' do
       parameterized.bind :a, target

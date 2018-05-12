@@ -21,10 +21,12 @@ module Vissen
     def_delegators :@_value, :value
 
     # Forwards all parameters to super.
-    def initialize(*)
-      super
+    def initialize(*args, parameters:, output:)
+      super(*args)
 
       @_visited = false
+      @_params  = parameters
+      @_value   = output
     end
 
     # @raise  [NotImplementedError] if not implemented by descendent.
@@ -86,16 +88,8 @@ module Vissen
       @_params.fetch(param).bind target
     end
 
-    def parameters=(parameters)
-      @_params = parameters
-    end
-
     def parameters
       @_params
-    end
-
-    def output=(value)
-      @_value = value
     end
   end
 end
