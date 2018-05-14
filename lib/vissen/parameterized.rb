@@ -22,6 +22,8 @@ module Vissen
 
     def_delegators :@_value, :value
 
+    def_delegator :@_value, :is_a?, :returns_a?
+
     private_constant :Accessor
 
     # Forwards all parameters to super.
@@ -29,13 +31,14 @@ module Vissen
     # @param  args [Array<Object>] the arguments to forward to super.
     # @param  parameters [Hash<Symbol, Parameter>] the input parameters.
     # @param  output [Value] the output value object.
-    def initialize(*args, parameters:, output:)
+    def initialize(*args, parameters:, output:, scope: nil)
       super(*args)
 
       @_visited  = false
       @_params   = parameters
       @_value    = output
       @_accessor = Accessor.new parameters
+      @_scope    = scope
     end
 
     # @raise  [NotImplementedError] if not implemented by descendent.
@@ -94,6 +97,8 @@ module Vissen
     # @param  target [#value] the value object to bind to.
     # @return [Parameter] the parameter that was bound.
     def bind(param, target)
+      # TODO: Only allow binding to target from the same scope,
+      #       or from the global scope.
       @_params.fetch(param).bind target
     end
 
@@ -106,3 +111,5 @@ module Vissen
     alias params parameters
   end
 end
+
+require 'vissen/parameterized/conditional'

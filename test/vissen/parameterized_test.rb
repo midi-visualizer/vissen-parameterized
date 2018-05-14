@@ -107,4 +107,14 @@ describe Vissen::Parameterized do
       assert_raises(KeyError) { parameterized.bind :unknown, target }
     end
   end
+
+  describe '#returns_a?' do
+    it 'returns true when the output class matches' do
+      assert parameterized.returns_a? real_class
+    end
+
+    it 'returns false when the output class does not match' do
+      refute parameterized.returns_a? Class.new
+    end
+  end
 end
