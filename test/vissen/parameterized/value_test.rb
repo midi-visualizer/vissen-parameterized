@@ -54,4 +54,10 @@ describe Vissen::Parameterized::Value do
       refute res
     end
   end
+
+  describe '#scope' do
+    it 'returns the global scope' do
+      assert_same Vissen::Parameterized::GlobalScope.instance, value_mock.scope
+    end
+  end
 end

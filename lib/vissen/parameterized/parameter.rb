@@ -18,7 +18,7 @@ module Vissen
     class Parameter
       extend Forwardable
 
-      def_delegators :@target, :value, :tainted?, :untaint!
+      def_delegators :@target, :value, :tainted?, :untaint!, :scope
 
       # @param  value_klass [Class] the value type supported by the parameter.
       def initialize(value_klass)

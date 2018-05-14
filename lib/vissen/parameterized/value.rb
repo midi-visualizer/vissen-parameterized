@@ -61,6 +61,10 @@ module Vissen
         @tainted = false
       end
 
+      def scope
+        GlobalScope.instance
+      end
+
       protected
 
       def taint!

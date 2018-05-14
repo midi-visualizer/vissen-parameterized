@@ -12,6 +12,10 @@ describe Vissen::Parameterized do
   let(:params)     { { a: param_a, b: param_b } }
   let(:output)     { real_class.new }
 
+  let(:global_scope) { Vissen::Parameterized::GlobalScope.instance }
+  let(:conditional)  { Vissen::Parameterized::Conditional.new { true } }
+  let(:scope)        { global_scope.create_scope conditional }
+
   let(:parameterized) { subject.new parameters: params, output: output }
 
   before do
@@ -21,6 +25,20 @@ describe Vissen::Parameterized do
 
   it 'has a version number' do
     refute_nil ::Vissen::Parameterized::VERSION
+  end
+
+  describe '.new' do
+    it 'uses the global scope by default' do
+      assert_same global_scope, parameterized.scope
+    end
+
+    it 'accepts an optional scope' do
+      parameterized = subject.new parameters: params,
+                                  output: output,
+                                  scope: scope
+
+      assert_same scope, parameterized.scope
+    end
   end
 
   describe '#call' do

@@ -1,9 +1,12 @@
 # frozen_string_literal: true
 
 require 'forwardable'
+require 'singleton'
 
 require 'vissen/parameterized/version'
 require 'vissen/parameterized/accessor'
+require 'vissen/parameterized/scope'
+require 'vissen/parameterized/global_scope'
 require 'vissen/parameterized/value'
 require 'vissen/parameterized/value/bool'
 require 'vissen/parameterized/value/real'
@@ -31,7 +34,7 @@ module Vissen
     # @param  args [Array<Object>] the arguments to forward to super.
     # @param  parameters [Hash<Symbol, Parameter>] the input parameters.
     # @param  output [Value] the output value object.
-    def initialize(*args, parameters:, output:, scope: nil)
+    def initialize(*args, parameters:, output:, scope: GlobalScope.instance)
       super(*args)
 
       @_visited  = false
@@ -99,6 +102,7 @@ module Vissen
     def bind(param, target)
       # TODO: Only allow binding to target from the same scope,
       #       or from the global scope.
+      # raise 'Scope error' unless scope.include? target
       @_params.fetch(param).bind target
     end
 
@@ -109,6 +113,10 @@ module Vissen
     end
 
     alias params parameters
+
+    def scope
+      @_scope
+    end
   end
 end
 
