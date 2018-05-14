@@ -6,6 +6,8 @@ module Vissen
     # objects. It allows access to parameters that looks like `params.input`
     # instead of `params[:input].value`.
     class Accessor
+      protected
+
       # @param  parameters [Hash<Symbol, Parameter>] the parameters to provide
       #   access to.
       def initialize(parameters)

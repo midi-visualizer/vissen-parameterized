@@ -39,7 +39,7 @@ module Vissen
       #
       # @param  obj [#scope] the object to scope check.
       # @return [true] if the object either shares this scope or a parent scope.
-      # @reutrn [false] otherwise.
+      # @return [false] otherwise.
       def include?(obj)
         include_scope? obj.scope
       end
@@ -58,7 +58,7 @@ module Vissen
       # Checks if the given scope is included in the scope hierarchy of this
       # one.
       #
-      # @param  [Scope, Object] the scope to check.
+      # @param  other [Scope, Object] the scope to check.
       # @return [true] if the given scope is equal to this one, or one of the
       #   parents.
       def include_scope?(other)

@@ -124,6 +124,26 @@ describe Vissen::Parameterized do
     it 'raises a KeyError for unknown parameters' do
       assert_raises(KeyError) { parameterized.bind :unknown, target }
     end
+
+    it 'raises a RuntimeError when binding outside the scope' do
+      other = subject.new parameters: params,
+                          output: output,
+                          scope: scope
+
+      assert_raises(RuntimeError) { parameterized.bind :a, other }
+    end
+  end
+
+  describe '#set' do
+    it 'sets the parameter to the given value' do
+      parameterized.set :a, 5.6
+      assert param_a.constant?
+      assert_equal 5.6, param_a.value
+    end
+
+    it 'raises a KeyError for unknown parameters' do
+      assert_raises(KeyError) { parameterized.set :unknown, 0 }
+    end
   end
 
   describe '#returns_a?' do

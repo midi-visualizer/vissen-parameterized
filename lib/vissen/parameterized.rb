@@ -23,11 +23,18 @@ module Vissen
   module Parameterized
     extend Forwardable
 
+    # @!method value
+    # @return [Object] the output value.
     def_delegators :@_value, :value
 
+    # @!method returns_a?(value_klass)
+    # Checks if the parameterized object returns a value of the given value
+    # class.
+    #
+    # @param  value_klass [Class] the class to test.
+    # @return [true] if the output value is of the given class.
+    # @return [false] otherwise.
     def_delegator :@_value, :is_a?, :returns_a?
-
-    private_constant :Accessor
 
     # Forwards all parameters to super.
     #
@@ -100,10 +107,20 @@ module Vissen
     # @param  target [#value] the value object to bind to.
     # @return [Parameter] the parameter that was bound.
     def bind(param, target)
-      # TODO: Only allow binding to target from the same scope,
-      #       or from the global scope.
-      # raise 'Scope error' unless scope.include? target
+      raise 'Scope error' unless scope.include? target
       @_params.fetch(param).bind target
+    end
+    
+    # Sets the constant value of a parameter.
+    #
+    # @see    Parameter#set
+    # @raise  [KeyError] if the parameter is not found.
+    #
+    # @param  param [Symbol] the parameter to bind.
+    # @param  target [Object] the value to set.
+    # @return [Parameter] the parameter that was set.
+    def set(param, value)
+      @_params.fetch(param).set value
     end
 
     # @return [Accessor] a proxy object that provides access to parameters via
@@ -114,6 +131,7 @@ module Vissen
 
     alias params parameters
 
+    # @return [Scope] the scope to which the parameterized object belongs.
     def scope
       @_scope
     end

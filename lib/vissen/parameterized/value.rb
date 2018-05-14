@@ -61,6 +61,9 @@ module Vissen
         @tainted = false
       end
 
+      # Values are always considered part of the global scope.
+      #
+      # @return [Scope] the scope of the value.
       def scope
         GlobalScope.instance
       end
