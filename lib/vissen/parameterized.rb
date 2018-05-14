@@ -37,7 +37,7 @@ module Vissen
     # @return [false] otherwise.
     def_delegator :@_value, :is_a?, :returns_a?
 
-    # Forwards all parameters to super.
+    # Forwards all arguments to super.
     #
     # @param  args [Array<Object>] the arguments to forward to super.
     # @param  parameters [Hash<Symbol, Parameter>] the input parameters.
