@@ -118,7 +118,7 @@ module Vissen
     # @raise  [KeyError] if the parameter is not found.
     #
     # @param  param [Symbol] the parameter to bind.
-    # @param  target [Object] the value to set.
+    # @param  value [Object] the value to set.
     # @return [Parameter] the parameter that was set.
     def set(param, value)
       @_params.fetch(param).set value
