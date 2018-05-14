@@ -27,4 +27,18 @@ describe Vissen::Parameterized::Conditional do
       assert conditional.met?
     end
   end
+
+  describe '#force!' do
+    it 'forces the conditional to return true' do
+      input.write 3
+      conditional.tainted?
+      refute conditional.met?
+      conditional.force!
+      assert conditional.met?
+
+      conditional.untaint!
+      refute conditional.tainted?
+      assert conditional.met?
+    end
+  end
 end

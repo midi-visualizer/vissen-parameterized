@@ -21,6 +21,11 @@ module Vissen
         true
       end
 
+      # @raise [RuntimeError]
+      def kill!
+        raise 'The global scope cannot be killed'
+      end
+
       # The only scope that is included in the global scope is the global scope
       # itself.
       #

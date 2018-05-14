@@ -110,7 +110,7 @@ module Vissen
       raise 'Scope error' unless scope.include? target
       @_params.fetch(param).bind target
     end
-    
+
     # Sets the constant value of a parameter.
     #
     # @see    Parameter#set

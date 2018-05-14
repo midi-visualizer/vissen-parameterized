@@ -34,6 +34,13 @@ module Vissen
         !dead?
       end
 
+      # Forces the conditional to return true, irregardless of its actual state.
+      #
+      # @return [nil]
+      def kill!
+        @conditional.force!
+      end
+
       # Checks if the given object is included, either in this scope or in any
       # of the parent scopes.
       #

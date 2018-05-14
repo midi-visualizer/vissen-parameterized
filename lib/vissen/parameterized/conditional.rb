@@ -42,6 +42,20 @@ module Vissen
           yield params.input
         end
       end
+
+      # Forces the state of the output to the given value. The input is unbound
+      # and untainted to prevent it from affecting the output further.
+      #
+      # @param  value [true, false] the value to force.
+      # @return [true] if the output was changed.
+      # @return [false] otherwise.
+      def force!(value = true)
+        input = @_params[:input]
+        input.unbind unless input.constant?
+        input.untaint!
+
+        @_value.write value
+      end
     end
   end
 end

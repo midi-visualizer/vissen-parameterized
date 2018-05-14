@@ -55,6 +55,14 @@ describe Vissen::Parameterized::Scope do
     end
   end
 
+  describe '#kill!' do
+    it 'kills the scope' do
+      refute scope.dead?
+      scope.kill!
+      assert scope.dead?
+    end
+  end
+
   describe '#create_scope' do
     it 'returns a new child scope' do
       child = scope.create_scope conditional
@@ -70,12 +78,6 @@ describe Vissen::Parameterized::Scope do
 
     it 'includes the global scope' do
       assert scope.include_scope? global_scope
-    end
-  end
-
-  describe '#parent' do
-    it 'raises a StopIteration' do
-      assert_raises(StopIteration) { global_scope.parent }
     end
   end
 end

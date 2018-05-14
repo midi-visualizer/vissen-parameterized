@@ -39,7 +39,8 @@ module Vissen
       # tainted if the new value differs from the previous.
       #
       # @param  new_value [Object] the new value to write.
-      # @return [nil]
+      # @return [true] if the value was changed.
+      # @return [false] otherwise.
       def write(new_value)
         return false if new_value == @value
         @value = new_value

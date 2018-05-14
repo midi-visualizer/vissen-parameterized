@@ -23,6 +23,12 @@ describe Vissen::Parameterized::GlobalScope do
     end
   end
 
+  describe '#kill!' do
+    it 'raises a runtime error' do
+      assert_raises(RuntimeError) { scope.kill! }
+    end
+  end
+
   describe '#create_scope' do
     it 'returns a new child scope' do
       child = scope.create_scope conditional
@@ -34,6 +40,12 @@ describe Vissen::Parameterized::GlobalScope do
   describe '#include_scope?' do
     it 'includes itself' do
       assert scope.include_scope? scope
+    end
+  end
+
+  describe '#parent' do
+    it 'raises a StopIteration' do
+      assert_raises(StopIteration) { scope.parent }
     end
   end
 end
