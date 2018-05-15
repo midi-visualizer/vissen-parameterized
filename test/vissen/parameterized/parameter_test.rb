@@ -15,7 +15,12 @@ describe Vissen::Parameterized::Parameter do
     end
 
     it 'uses the default value of the given type' do
-      assert_equal value_klass::DEFAULT, parameter.value
+      assert_same value_klass::DEFAULT, parameter.value
+    end
+
+    it 'accepts an initial value' do
+      parameter = subject.new value_klass, 1
+      assert_same 1.0, parameter.value
     end
   end
 
@@ -24,14 +29,21 @@ describe Vissen::Parameterized::Parameter do
       it 'resets the constant value' do
         parameter.set 42
         parameter.clear!
-        assert_equal value_klass::DEFAULT, parameter.value
+        assert_same value_klass::DEFAULT, parameter.value
+      end
+
+      it 'resets to the initial value if given one' do
+        parameter = subject.new value_klass, 1
+        parameter.set 42
+        parameter.clear!
+        assert_same 1.0, parameter.value
       end
     end
 
     describe '#set' do
       it 'stores a new constant value' do
         parameter.set 42
-        assert_equal 42.0, parameter.value
+        assert_same 42.0, parameter.value
       end
     end
 

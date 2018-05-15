@@ -21,9 +21,12 @@ module Vissen
       def_delegators :@target, :value, :tainted?, :untaint!, :scope
 
       # @param  value_klass [Class] the value type supported by the parameter.
-      def initialize(value_klass)
-        @constant = value_klass.new
-        clear!
+      # @param  default_value [Object] the default constant value. It defaults
+      #   to the default of the given value class.
+      def initialize(value_klass, default_value = nil)
+        @default  = default_value.nil? ? value_klass::DEFAULT : default_value
+        @constant = value_klass.new @default
+        @target   = @constant
       end
 
       # Unbinds the parameter and resets the value of the to the default of the
@@ -31,7 +34,7 @@ module Vissen
       #
       # @return [self]
       def clear!
-        set @constant.class::DEFAULT
+        set @default
       end
 
       # @return [false] if the parameter is bound to a value object.
