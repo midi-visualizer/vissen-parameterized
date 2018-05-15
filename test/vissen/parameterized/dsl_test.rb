@@ -16,16 +16,19 @@ describe Vissen::Parameterized::DSL do
   let(:scope) { global_scope.create_scope conditional }
 
   describe '.param' do
-    it 'accepts a hash' do
-      subject.param real: real_klass,
-                    vec:  vec_klass
+    it 'accepts a key and value class' do
+      subject.param :real, real_klass
+    end
+
+    it 'accepts a default value' do
+      subject.param :real, real_klass, default: 42
     end
   end
 
   describe '.class_parameters' do
     before do
-      subject.param real: real_klass,
-                    vec:  vec_klass
+      subject.param :real, real_klass
+      subject.param :vec,  vec_klass
     end
 
     let(:parameters) { subject.class_parameters }
@@ -55,7 +58,7 @@ describe Vissen::Parameterized::DSL do
   describe '.new' do
     before do
       subject.output real_klass
-      subject.param real: real_klass
+      subject.param :real, real_klass
     end
 
     let(:instance) { subject.new }

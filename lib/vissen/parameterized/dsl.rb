@@ -15,11 +15,13 @@ module Vissen
     #   end
     #
     module DSL
-      # @param  hash [Hash] the parameter(s) to add.
+      # @param  key [Symbol] the parameter to add.
+      # @param  value_klass [Class] the value type of the parameter.
+      # @param  default [Object] the default value of the parameter.
       # @return [nil]
-      def param(**hash)
-        @_params ||= {}
-        @_params.merge! hash
+      def param(key, value_klass, default: nil)
+        @_params = {} unless defined? @_params
+        @_params[key] = [value_klass, default].freeze
         nil
       end
 
@@ -35,7 +37,7 @@ module Vissen
       def class_parameters
         return {}.freeze unless defined? @_params
 
-        @_params.each_with_object({}) { |(k, v), h| h[k] = Parameter.new v }
+        @_params.each_with_object({}) { |(k, v), h| h[k] = Parameter.new(*v) }
                 .freeze
       end
 
