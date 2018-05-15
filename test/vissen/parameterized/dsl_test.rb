@@ -25,6 +25,44 @@ describe Vissen::Parameterized::DSL do
     end
   end
 
+  describe 'custom value types' do
+    describe '.bool' do
+      it 'cretes a boolean parameter' do
+        subject.bool :bool, default: true
+        parameters = subject.class_parameters
+        assert parameters[:bool]
+        assert_same true, parameters[:bool].value
+      end
+    end
+
+    describe '.int' do
+      it 'cretes an integer parameter' do
+        subject.int :int, default: 42
+        parameters = subject.class_parameters
+        assert parameters[:int]
+        assert_same 42, parameters[:int].value
+      end
+    end
+
+    describe '.real' do
+      it 'cretes a real parameter' do
+        subject.real :real, default: 4.2
+        parameters = subject.class_parameters
+        assert parameters[:real]
+        assert_same 4.2, parameters[:real].value
+      end
+    end
+
+    describe '.vec' do
+      it 'cretes a vec parameter' do
+        subject.vec :vec, default: [4.2, 1.0]
+        parameters = subject.class_parameters
+        assert parameters[:vec]
+        assert_equal [4.2, 1.0], parameters[:vec].value
+      end
+    end
+  end
+
   describe '.class_parameters' do
     before do
       subject.param :real, real_klass

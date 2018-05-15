@@ -69,11 +69,24 @@ module Vissen
         GlobalScope.instance
       end
 
+      # @return [Array<Module>] an array of the modules and classes that include
+      #   the `Value` module.
+      def self.types
+        @types
+      end
+
       protected
 
       def taint!
         @tainted = true
       end
+
+      # @param  mod [Module]
+      def self.included(mod)
+        (@types ||= []) << mod
+      end
+
+      private_class_method :included
     end
   end
 end
