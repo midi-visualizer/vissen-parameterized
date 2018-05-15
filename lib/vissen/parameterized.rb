@@ -4,6 +4,8 @@ require 'forwardable'
 require 'singleton'
 
 require 'vissen/parameterized/version'
+require 'vissen/parameterized/error'
+require 'vissen/parameterized/scope_error'
 require 'vissen/parameterized/accessor'
 require 'vissen/parameterized/scope'
 require 'vissen/parameterized/global_scope'
@@ -111,12 +113,13 @@ module Vissen
     #
     # @see    Parameter#bind
     # @raise  [KeyError] if the parameter is not found.
+    # @raise  [ScopeError] if the parameter is out of scope.
     #
     # @param  param [Symbol] the parameter to bind.
     # @param  target [#value] the value object to bind to.
     # @return [Parameter] the parameter that was bound.
     def bind(param, target)
-      raise 'Scope error' unless scope.include? target
+      raise ScopeError unless scope.include? target
       @_params.fetch(param).bind target
     end
 

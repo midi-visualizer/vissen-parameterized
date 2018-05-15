@@ -79,12 +79,12 @@ module Vissen
       # `GlobalScope.instance.create_scope`.
       #
       # @raise  [TypeError] if the conditional does not respond to `#met?`.
-      # @raise  [RuntimeError] if the conditional is out of scope.
+      # @raise  [ScopeError] if the conditional is out of scope.
       def initialize(parent, conditional)
         raise TypeError unless conditional.respond_to? :met?
         @parent = parent
 
-        raise 'conditional is outside this scope' unless include? conditional
+        raise ScopeError unless include? conditional
         @conditional = conditional
       end
     end

@@ -15,6 +15,7 @@ describe Vissen::Parameterized do
   let(:global_scope) { Vissen::Parameterized::GlobalScope.instance }
   let(:conditional)  { Vissen::Parameterized::Conditional.new { true } }
   let(:scope)        { global_scope.create_scope conditional }
+  let(:scope_error)  { Vissen::Parameterized::ScopeError }
 
   let(:parameterized) { subject.new parameters: params, output: output }
 
@@ -137,12 +138,12 @@ describe Vissen::Parameterized do
       assert_raises(KeyError) { parameterized.bind :unknown, target }
     end
 
-    it 'raises a RuntimeError when binding outside the scope' do
+    it 'raises a ScopeError when binding outside the scope' do
       other = subject.new parameters: params,
                           output: output,
                           scope: scope
 
-      assert_raises(RuntimeError) { parameterized.bind :a, other }
+      assert_raises(scope_error) { parameterized.bind :a, other }
     end
   end
 

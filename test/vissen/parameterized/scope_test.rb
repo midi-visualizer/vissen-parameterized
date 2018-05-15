@@ -10,15 +10,16 @@ describe Vissen::Parameterized::Scope do
   let(:conditional_klass) { Vissen::Parameterized::Conditional }
   let(:conditional) { conditional_klass.new(value_klass) { true } }
   let(:scope) { global_scope.create_scope conditional }
+  let(:scope_error) { Vissen::Parameterized::ScopeError }
 
   describe '.new' do
     it 'raises a TypeError for invalid conditionals' do
       assert_raises(TypeError) { global_scope.create_scope Object.new }
     end
 
-    it 'raises a RuntimeError if the conditional is badly scoped' do
+    it 'raises a ScopeError if the conditional is badly scoped' do
       conditional = conditional_klass.new(value_klass, scope: scope) { true }
-      assert_raises(RuntimeError) { global_scope.create_scope conditional }
+      assert_raises(scope_error) { global_scope.create_scope conditional }
     end
   end
 
