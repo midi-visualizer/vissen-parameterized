@@ -39,6 +39,18 @@ describe Vissen::Parameterized do
 
       assert_same scope, parameterized.scope
     end
+
+    it 'accepts a hash of initial values' do
+      parameterized = subject.new parameters: params,
+                                  output: output,
+                                  setup: { a: 4.2, b: target }
+
+      param_a.tainted?
+      param_b.tainted?
+
+      assert_same 4.2, parameterized.parameters.a
+      assert_same 3.0, parameterized.parameters.b
+    end
   end
 
   describe '#call' do

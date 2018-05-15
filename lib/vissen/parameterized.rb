@@ -42,14 +42,22 @@ module Vissen
     # @param  args [Array<Object>] the arguments to forward to super.
     # @param  parameters [Hash<Symbol, Parameter>] the input parameters.
     # @param  output [Value] the output value object.
-    def initialize(*args, parameters:, output:, scope: GlobalScope.instance)
-      super(*args)
-
-      @_visited  = false
-      @_params   = parameters
-      @_value    = output
+    # @param  scope [Scope] the scope of the object.
+    # @param  setup [Hash<Symbol, Object>] the initial setup.
+    def initialize(*args,
+                   parameters:,
+                   output:,
+                   scope: GlobalScope.instance,
+                   setup: {})
       @_accessor = Accessor.new parameters
+      @_params   = parameters
       @_scope    = scope
+      @_value    = output
+      @_visited  = false
+
+      load_initial setup
+
+      super(*args)
     end
 
     # @raise  [NotImplementedError] if not implemented by descendent.
@@ -135,6 +143,15 @@ module Vissen
     # @return [Scope] the scope to which the parameterized object belongs.
     def scope
       @_scope
+    end
+
+    private
+
+    def load_initial(setup)
+      setup.each do |key, value|
+        @_params.fetch(key, false)
+                .send(value.respond_to?(:value) ? :bind : :set, value)
+      end
     end
   end
 end
