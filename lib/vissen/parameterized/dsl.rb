@@ -43,10 +43,10 @@ module Vissen
 
       # @raise  [RuntimeError] if no output class has been defined.
       #
-      # @return [Value] a new instance of the value class defined using
-      #   `#output`.
+      # @return [Value, nil] a new instance of the value class defined using
+      #   `#output`, or nil if nothing was defined.
       def class_output
-        raise 'No output class defined' unless defined? @_output
+        return nil unless defined? @_output
         @_output.new
       end
 
@@ -57,8 +57,8 @@ module Vissen
       # @param  mod [Module] the module that extended the DSL.
       def self.extended(mod)
         define_param_types mod
-
         return unless mod <= Parameterized
+
         mod.define_singleton_method :new do |*args, **opts|
           super(*args,
                 parameters: class_parameters,

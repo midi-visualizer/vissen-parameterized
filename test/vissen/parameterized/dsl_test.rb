@@ -83,8 +83,8 @@ describe Vissen::Parameterized::DSL do
   end
 
   describe '.class_output' do
-    it 'raises a RuntimeError if no outut is defined' do
-      assert_raises(RuntimeError) { subject.class_output }
+    it 'returns nil if no outut is defined' do
+      assert_nil subject.class_output
     end
 
     it 'returns a new instance of the output class' do
