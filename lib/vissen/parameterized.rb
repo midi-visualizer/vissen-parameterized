@@ -167,6 +167,17 @@ module Vissen
                              type: Value.canonicalize(@_value.class)
     end
 
+    # Iterates over the parameterized objects currently bound to the parameters.
+    #
+    # @return [Enumerable] if no block is given.
+    def each_parameterized
+      return to_enum(__callee__) unless block_given?
+      @_params.each do |_, param|
+        next unless param.is_a? Parameterized
+        yield param
+      end
+    end
+
     private
 
     def load_initial(setup)

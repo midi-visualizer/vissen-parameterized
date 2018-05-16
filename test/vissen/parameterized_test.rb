@@ -179,6 +179,26 @@ describe Vissen::Parameterized do
     end
   end
 
+  describe '#each_parameterized' do
+    it 'returns an enumerator when not given a block' do
+      enum = parameterized.each_parameterized
+      assert_kind_of Enumerator, enum
+    end
+
+    it 'yields nothing without parameterized object among the parameters' do
+      enum = parameterized.each_parameterized
+      assert_raises(StopIteration) { enum.next }
+    end
+
+    it 'yields each parameterized object among the parameters' do
+      root = subject.new parameters: { a: param_a, c: parameterized },
+                         output: real_class.new
+      root.each_parameterized do |obj|
+        assert_same obj, parameterized
+      end
+    end
+  end
+
   describe '#to_s' do
     it 'returns the string representation of the output value' do
       assert_equal output.to_s, parameterized.to_s
