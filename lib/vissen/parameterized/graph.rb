@@ -29,6 +29,8 @@ module Vissen
           @end_nodes.each(&:tainted?)
           @end_nodes.each(&:untaint!)
         end
+
+        @end_nodes.each { |node| yield node.value } if block_given?
       end
     end
   end
