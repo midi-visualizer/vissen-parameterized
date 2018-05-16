@@ -2,8 +2,8 @@
 
 module Vissen
   module Parameterized
-    # The graph implements a thread safe mechanism for updating and untainting a
-    # set of interconnected paramaeterized objects.
+    # The graph implements a mechanism for updating and untainting a set of
+    # interconnected paramaeterized objects.
     class Graph
       # @raise  [ScopeError] if any of the end nodes are not included in the
       #   scope.
@@ -18,17 +18,14 @@ module Vissen
         end
 
         @end_nodes = end_nodes
-        @mutex = Mutex.new
 
         freeze
       end
 
-      # Updates the graph in a thread safe manner.
+      # Updates the entire graph.
       def update!
-        @mutex.synchronize do
-          @end_nodes.each(&:tainted?)
-          @end_nodes.each(&:untaint!)
-        end
+        @end_nodes.each(&:tainted?)
+        @end_nodes.each(&:untaint!)
 
         @end_nodes.each { |node| yield node.value } if block_given?
       end
