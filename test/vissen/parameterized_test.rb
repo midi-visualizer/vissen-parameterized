@@ -128,6 +128,16 @@ describe Vissen::Parameterized do
     end
   end
 
+  describe '#parameter?' do
+    it 'returns true when the parameter exists' do
+      assert parameterized.parameter? :a
+    end
+
+    it 'returns false when the parameter does not exist' do
+      refute parameterized.parameter? :c
+    end
+  end
+
   describe '#bind' do
     it 'binds the parameter to the target' do
       parameterized.bind :a, target

@@ -112,6 +112,12 @@ module Vissen
       @_value.write call(@_accessor)
     end
 
+    # @return [true] if the parameterized object has the given parameter.
+    # @return [false] otherwise.
+    def parameter?(key)
+      @_params.key? key
+    end
+
     # Binds a parameter to a target value.
     #
     # @see    Parameter#bind
