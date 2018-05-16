@@ -18,7 +18,7 @@ module Vissen
     class Parameter
       extend Forwardable
 
-      INSPECT_FORMAT = '#<%<name>s:0x%016<object_id>x %<type>s [%<state>s]>'
+      INSPECT_FORMAT = '#<%<name>s:0x%016<object_id>x %<type>s:%<value>s>'
       private_constant :INSPECT_FORMAT
 
       def_delegators :@target, :value, :tainted?, :untaint!, :scope
@@ -86,6 +86,13 @@ module Vissen
         @constant.class
       end
 
+      # @return [String] the parameter value formated as a string wrapped either
+      #   in `()` or `{}` depending on if the value is constant or bound.
+      def to_s
+        base = @target.to_s
+        constant? ? "(#{base})" : "{#{base}}"
+      end
+
       # Produces a readable string representation of the parameter object.
       #
       # @return [String] a string representation.
@@ -93,7 +100,7 @@ module Vissen
         format INSPECT_FORMAT, name: self.class.name,
                                object_id: object_id,
                                type: Value.canonicalize(type),
-                               state: (constant? ? 'constant' : 'bound')
+                               value: to_s
       end
     end
   end

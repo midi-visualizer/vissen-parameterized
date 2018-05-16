@@ -169,6 +169,12 @@ describe Vissen::Parameterized do
     end
   end
 
+  describe '#to_s' do
+    it 'returns the string representation of the output value' do
+      assert_equal output.to_s, parameterized.to_s
+    end
+  end
+
   describe '#inspect' do
     it 'returns a string representation of the parameterized object' do
       str       = parameterized.inspect

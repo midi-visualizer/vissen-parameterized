@@ -29,7 +29,7 @@ describe Vissen::Parameterized::Value do
   describe '#write' do
     it 'updates the value' do
       value_mock.write 42
-      assert_equal 42, value_mock.value
+      assert_same 42, value_mock.value
     end
 
     it 'taints untainted values' do
@@ -58,6 +58,19 @@ describe Vissen::Parameterized::Value do
   describe '#scope' do
     it 'returns the global scope' do
       assert_same Vissen::Parameterized::GlobalScope.instance, value_mock.scope
+    end
+  end
+
+  describe '#to_s' do
+    it 'returns a string representation of the value when tainted' do
+      value_mock.write 42
+      assert_equal '42*', value_mock.to_s
+    end
+
+    it 'returns a string representation of the value when untainted' do
+      value_mock.write 42
+      value_mock.untaint!
+      assert_equal '42', value_mock.to_s
     end
   end
 end

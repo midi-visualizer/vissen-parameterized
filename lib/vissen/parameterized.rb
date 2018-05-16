@@ -31,7 +31,7 @@ module Vissen
 
     # @!method value
     # @return [Object] the output value.
-    def_delegators :@_value, :value
+    def_delegators :@_value, :value, :to_s
 
     # @!method returns_a?(value_klass)
     # Checks if the parameterized object returns a value of the given value

@@ -60,4 +60,17 @@ describe Vissen::Parameterized::Value::Vec do
       assert_raises(TypeError) { subject.new Object.new }
     end
   end
+
+  describe '#to_s' do
+    let(:vec) { subject.new [42, 0.3] }
+
+    it 'returns the value of the vector as a string when tainted' do
+      assert_equal '[42.0, 0.3]*', vec.to_s
+    end
+
+    it 'returns the value of the vector as a string when untainted' do
+      vec.untaint!
+      assert_equal '[42.0, 0.3]', vec.to_s
+    end
+  end
 end

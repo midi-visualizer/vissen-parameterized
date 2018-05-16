@@ -88,6 +88,13 @@ module Vissen
              .downcase
       end
 
+      # @return [String] the value formated as a string, with an appended '*' if
+      #   the value is tainted.
+      def to_s
+        base = @value.to_s
+        tainted? ? base + '*' : base
+      end
+
       protected
 
       def taint!

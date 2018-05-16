@@ -59,11 +59,17 @@ describe Vissen::Parameterized::Parameter do
       end
     end
 
+    describe '#to_s' do
+      it 'returns the string value' do
+        assert_equal '(0.0*)', parameter.to_s
+      end
+    end
+
     describe '#inspect' do
       it 'returns a string representation of the parameter' do
         object_id = format '0x%016x', parameter.object_id
         assert_equal "#<Vissen::Parameterized::Parameter:#{object_id} " \
-                     'real [constant]>', parameter.inspect
+                     'real:(0.0*)>', parameter.inspect
       end
     end
   end
@@ -129,11 +135,18 @@ describe Vissen::Parameterized::Parameter do
       end
     end
 
+    describe '#to_s' do
+      it 'returns the string value' do
+        target.untaint!
+        assert_equal "{#{target}}", parameter.to_s
+      end
+    end
+
     describe '#inspect' do
       it 'returns a string representation of the parameter' do
         object_id = format '0x%016x', parameter.object_id
         assert_equal "#<Vissen::Parameterized::Parameter:#{object_id} " \
-                     'real [bound]>', parameter.inspect
+                     "real:{#{target}}>", parameter.inspect
       end
     end
   end
