@@ -16,6 +16,7 @@ require 'vissen/parameterized/value/real'
 require 'vissen/parameterized/value/vec'
 require 'vissen/parameterized/parameter'
 require 'vissen/parameterized/dsl'
+require 'vissen/parameterized/graph'
 
 module Vissen
   # A parameterized object should have
