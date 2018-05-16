@@ -180,6 +180,8 @@ describe Vissen::Parameterized do
   end
 
   describe '#each_parameterized' do
+    let(:param_c) { Vissen::Parameterized::Parameter.new real_class }
+
     it 'returns an enumerator when not given a block' do
       enum = parameterized.each_parameterized
       assert_kind_of Enumerator, enum
@@ -191,11 +193,15 @@ describe Vissen::Parameterized do
     end
 
     it 'yields each parameterized object among the parameters' do
-      root = subject.new parameters: { a: param_a, c: parameterized },
+      root = subject.new parameters: { a: param_a, c: param_c },
                          output: real_class.new
+      param_c.bind parameterized
+      count = 0
       root.each_parameterized do |obj|
         assert_same obj, parameterized
+        count += 1
       end
+      assert_equal 1, count
     end
   end
 

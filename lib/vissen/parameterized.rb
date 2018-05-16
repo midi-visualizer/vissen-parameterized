@@ -173,8 +173,9 @@ module Vissen
     def each_parameterized
       return to_enum(__callee__) unless block_given?
       @_params.each do |_, param|
-        next unless param.is_a? Parameterized
-        yield param
+        next if param.constant?
+        target = param.target
+        yield target if target.is_a? Parameterized
       end
     end
 
