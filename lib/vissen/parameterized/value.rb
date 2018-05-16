@@ -75,6 +75,19 @@ module Vissen
         @types
       end
 
+      # Converts a class name to a string.
+      #
+      #   Vissen::Parameterized::Value::Real -> "real"
+      #
+      # @param  klass [Class] the class to canonicalize.
+      # @return [String] a string version of the class name.
+      def self.canonicalize(klass)
+        klass.name
+             .split('::').last
+             .gsub(/([a-z\d])([A-Z])/, '\1_\2')
+             .downcase
+      end
+
       protected
 
       def taint!

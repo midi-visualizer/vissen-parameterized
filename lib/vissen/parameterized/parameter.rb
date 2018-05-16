@@ -77,6 +77,11 @@ module Vissen
         raise 'cannot unbind constant' if constant?
         set @target.value
       end
+
+      # @return [Value] the value class of the parameter.
+      def type
+        @constant.class
+      end
     end
   end
 end

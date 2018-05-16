@@ -26,6 +26,9 @@ module Vissen
   module Parameterized
     extend Forwardable
 
+    INSPECT_FORMAT = '#<%<name>s:0x%016<object_id>x (%<params>s) -> %<type>s>'
+    private_constant :INSPECT_FORMAT
+
     # @!method value
     # @return [Object] the output value.
     def_delegators :@_value, :value
@@ -148,6 +151,16 @@ module Vissen
       @_scope
     end
 
+    # Produces a readable string representation of the parameterized object.
+    #
+    # @return [String] a string representation.
+    def inspect
+      format INSPECT_FORMAT, name: self.class.name,
+                             object_id: object_id,
+                             params: params_with_types,
+                             type: Value.canonicalize(@_value.class)
+    end
+
     private
 
     def load_initial(setup)
@@ -155,6 +168,10 @@ module Vissen
         @_params.fetch(key, false)
                 .send(value.respond_to?(:value) ? :bind : :set, value)
       end
+    end
+
+    def params_with_types
+      @_params.map { |k, v| "#{k}:#{Value.canonicalize(v.type)}" }.join(', ')
     end
   end
 end

@@ -91,11 +91,7 @@ module Vissen
       # @param  klass [Class] the class to symbolize.
       # @return [Symbol] a symbolized version of the class name.
       def self.class_to_sym(klass)
-        klass.name
-             .split('::').last
-             .gsub(/([a-z\d])([A-Z])/, '\1_\2')
-             .downcase
-             .to_sym
+        Value.canonicalize(klass).to_sym
       end
 
       private_class_method :class_to_sym

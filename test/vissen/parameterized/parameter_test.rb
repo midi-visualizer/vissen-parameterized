@@ -114,5 +114,11 @@ describe Vissen::Parameterized::Parameter do
         assert_equal target.value, parameter.value
       end
     end
+
+    describe '#type' do
+      it 'returns the value type of the parameter' do
+        assert_same value_klass, parameter.type
+      end
+    end
   end
 end

@@ -168,4 +168,14 @@ describe Vissen::Parameterized do
       refute parameterized.returns_a? Class.new
     end
   end
+
+  describe '#inspect' do
+    it 'returns a string representation of the parameterized object' do
+      str       = parameterized.inspect
+      object_id = format '0x%016x', parameterized.object_id
+
+      assert_equal "#<TestHelper::ParameterizedMock:#{object_id} " \
+                   '(a:real, b:real) -> real>', str
+    end
+  end
 end
