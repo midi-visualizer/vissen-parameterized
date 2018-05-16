@@ -58,6 +58,14 @@ describe Vissen::Parameterized::Parameter do
         assert_raises(RuntimeError) { parameter.unbind }
       end
     end
+
+    describe '#inspect' do
+      it 'returns a string representation of the parameter' do
+        object_id = format '0x%016x', parameter.object_id
+        assert_equal "#<Vissen::Parameterized::Parameter:#{object_id} " \
+                     'real [constant]>', parameter.inspect
+      end
+    end
   end
 
   describe '#bind' do
@@ -118,6 +126,14 @@ describe Vissen::Parameterized::Parameter do
     describe '#type' do
       it 'returns the value type of the parameter' do
         assert_same value_klass, parameter.type
+      end
+    end
+
+    describe '#inspect' do
+      it 'returns a string representation of the parameter' do
+        object_id = format '0x%016x', parameter.object_id
+        assert_equal "#<Vissen::Parameterized::Parameter:#{object_id} " \
+                     'real [bound]>', parameter.inspect
       end
     end
   end

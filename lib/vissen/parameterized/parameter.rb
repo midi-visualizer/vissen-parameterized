@@ -18,6 +18,9 @@ module Vissen
     class Parameter
       extend Forwardable
 
+      INSPECT_FORMAT = '#<%<name>s:0x%016<object_id>x %<type>s [%<state>s]>'
+      private_constant :INSPECT_FORMAT
+
       def_delegators :@target, :value, :tainted?, :untaint!, :scope
 
       # @param  value_klass [Class] the value type supported by the parameter.
@@ -81,6 +84,16 @@ module Vissen
       # @return [Value] the value class of the parameter.
       def type
         @constant.class
+      end
+
+      # Produces a readable string representation of the parameter object.
+      #
+      # @return [String] a string representation.
+      def inspect
+        format INSPECT_FORMAT, name: self.class.name,
+                               object_id: object_id,
+                               type: Value.canonicalize(type),
+                               state: (constant? ? 'constant' : 'bound')
       end
     end
   end
