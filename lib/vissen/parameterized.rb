@@ -59,7 +59,7 @@ module Vissen
       @_params   = parameters
       @_scope    = scope
       @_value    = output
-      @_visited  = false
+      @_checked  = false
 
       load_initial setup
 
@@ -79,9 +79,12 @@ module Vissen
     #
     # @return [false]
     def untaint!
-      @_visited = false
-      # ASUMPTION: if the value is untainted the params must also be unchanged.
-      return unless @_value.tainted?
+      # ASUMPTION: if the value has not been taint checked
+      #            there should be no untainted values in
+      #            this part of the graph. This does not
+      #            hold initially.
+      return unless @_checked
+      @_checked = false
 
       @_params.each { |_, param| param.untaint! }
       @_value.untaint!
@@ -100,8 +103,8 @@ module Vissen
     #   `#untaint!`.
     # @return [false] otherwise.
     def tainted?
-      return @_value.tainted? if @_visited
-      @_visited = true
+      return @_value.tainted? if @_checked
+      @_checked = true
 
       params_tainted =
         @_params.reduce(false) do |a, (_, param)|
@@ -184,7 +187,7 @@ module Vissen
 
     def load_initial(setup)
       setup.each do |key, value|
-        @_params.fetch(key, false)
+        @_params.fetch(key)
                 .send(value.respond_to?(:value) ? :bind : :set, value)
       end
     end

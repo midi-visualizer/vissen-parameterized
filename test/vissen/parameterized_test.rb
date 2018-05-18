@@ -70,16 +70,22 @@ describe Vissen::Parameterized do
   end
 
   describe '#untaint!' do
+    before do
+      parameterized.define_singleton_method(:call) { |_| 1.0 }
+    end
+
     it 'untaints the parameters' do
       assert param_a.tainted?
       assert param_b.tainted?
       assert output.tainted?
+      assert parameterized.tainted?
 
       parameterized.untaint!
 
       refute param_a.tainted?
       refute param_b.tainted?
       refute output.tainted?
+      refute parameterized.tainted?
     end
   end
 
@@ -99,6 +105,7 @@ describe Vissen::Parameterized do
     end
 
     it 'returns false when no parameters have changed' do
+      assert parameterized.tainted?
       parameterized.untaint!
       refute parameterized.tainted?
     end
