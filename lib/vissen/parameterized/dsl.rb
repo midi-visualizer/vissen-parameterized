@@ -75,6 +75,9 @@ module Vissen
       # @param  mod [Module] the module to define the types on.
       def self.define_param_types(mod)
         Value.types.each do |klass|
+          # Skip unless the type is native to the library
+          next unless klass.name.start_with? 'Vissen::Parameterized::Value'
+
           name = class_to_sym klass
           mod.define_singleton_method name do |key, **opts|
             param(key, klass, **opts)
