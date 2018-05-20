@@ -21,3 +21,7 @@ desc 'Generate Ruby documentation'
 task doc: %w[yard]
 
 task default: %w[test rubocop:auto_correct]
+
+task pre_release: %i[default doc] do
+  sh 'bundle'
+end
