@@ -13,7 +13,11 @@ Gem::Specification.new do |spec|
 
   spec.summary       = 'Parameterized creates a dependency graph for pure ' \
                        'functions.'
-  spec.description   = ''
+  spec.description   = 'This utility library gives objects the ability to ' \
+                       'declare input dependencies, a transformation of ' \
+                       'those inputs and an output value. Forcing ' \
+                       'dependencies to be acyclic, the library can always ' \
+                       'find a valid update order of all the transformations.'
   spec.homepage      = 'https://github.com/midi-visualizer/vissen-parameterized'
   spec.license       = 'MIT'
 
