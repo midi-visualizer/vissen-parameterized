@@ -140,23 +140,29 @@ describe Vissen::Parameterized do
       assert_equal(-4, root.value)
     end
 
-    it 'works when chaining three objects' do
-      parameterized_a = subject.new parameters: { c: parameterized },
-                                    output: real_class.new
-      parameterized_a.define_singleton_method(:call) { |params| -params.c }
+    it 'works when chaining many objects' do
+      c = Vissen::Parameterized::Parameter.new real_class
+      root =
+        5.times.reduce(parameterized) do |a, _|
+          node = subject.new parameters: { a: a, c: c }, output: real_class.new
+          node.define_singleton_method(:call) { |p| 2 * (p.a + p.c) }
+          node
+        end
 
-      parameterized_b = subject.new parameters: { d: parameterized_a },
-                                    output: real_class.new
-      parameterized_b.define_singleton_method(:call) { |params| 2 * params.d }
+      assert root.tainted?
+      assert_equal(96, root.value)
 
-      assert parameterized_b.tainted?
-      assert_equal(-6, parameterized_b.value)
+      root.untaint!
 
-      parameterized_b.untaint!
+      param_b.set 1
+      assert root.tainted?
+      assert_equal(64, root.value)
 
-      param_a.set 2
-      assert parameterized_b.tainted?
-      assert_equal(-8, parameterized_b.value)
+      root.untaint!
+
+      c.set 2
+      assert root.tainted?
+      assert_equal(188, root.value)
     end
   end
 
