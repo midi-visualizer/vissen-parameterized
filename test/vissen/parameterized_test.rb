@@ -125,13 +125,19 @@ describe Vissen::Parameterized do
       refute @called
     end
 
-    it 'works when chaining multiple objects' do
+    it 'works when chaining two objects' do
       root = subject.new parameters: { c: parameterized },
                          output: real_class.new
       root.define_singleton_method(:call) { |params| -params.c }
 
       assert root.tainted?
       assert_equal(-3, root.value)
+
+      root.untaint!
+
+      param_a.set 2
+      assert root.tainted?
+      assert_equal(-4, root.value)
     end
   end
 
