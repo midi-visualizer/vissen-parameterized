@@ -139,6 +139,25 @@ describe Vissen::Parameterized do
       assert root.tainted?
       assert_equal(-4, root.value)
     end
+
+    it 'works when chaining three objects' do
+      parameterized_a = subject.new parameters: { c: parameterized },
+                                    output: real_class.new
+      parameterized_a.define_singleton_method(:call) { |params| -params.c }
+
+      parameterized_b = subject.new parameters: { d: parameterized_a },
+                                    output: real_class.new
+      parameterized_b.define_singleton_method(:call) { |params| 2 * params.d }
+
+      assert parameterized_b.tainted?
+      assert_equal(-6, parameterized_b.value)
+
+      parameterized_b.untaint!
+
+      param_a.set 2
+      assert parameterized_b.tainted?
+      assert_equal(-8, parameterized_b.value)
+    end
   end
 
   describe '#parameter?' do
