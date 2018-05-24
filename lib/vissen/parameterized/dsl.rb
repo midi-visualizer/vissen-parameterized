@@ -79,8 +79,8 @@ module Vissen
           next unless klass.name.start_with? 'Vissen::Parameterized::Value'
 
           name = class_to_sym klass
-          mod.define_singleton_method name do |key, **opts|
-            param(key, klass, **opts)
+          mod.define_singleton_method name do |key, opts|
+            param(key, klass, opts)
           end
         end
       end
