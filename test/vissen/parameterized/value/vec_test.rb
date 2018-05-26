@@ -52,6 +52,14 @@ describe Vissen::Parameterized::Value::Vec do
       refute vec.tainted?
     end
 
+    it 'returns true when the value changed' do
+      assert vec.write [rand, rand]
+    end
+
+    it 'returns true when the value did not change' do
+      refute vec.write [0.0, 0.0]
+    end
+
     it 'raises a TypeError for invalid arrays' do
       assert_raises(TypeError) { vec.write [0] }
     end

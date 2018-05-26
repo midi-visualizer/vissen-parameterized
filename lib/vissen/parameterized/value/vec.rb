@@ -30,14 +30,14 @@ module Vissen
         #   be coerced into floats.
         #
         # @param  new_value [Array<#to_f>] the new values to write.
-        # @return [nil]
+        # @return [true] if the value was changed.
+        # @return [false] otherwise.
         def write(new_value)
           return if @value == new_value
 
           @value[0] = Float(new_value[0])
           @value[1] = Float(new_value[1])
           taint!
-          nil
         rescue NoMethodError
           raise TypeError, 'The given object must support #[]'
         end

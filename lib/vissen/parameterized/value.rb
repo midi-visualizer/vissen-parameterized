@@ -45,7 +45,6 @@ module Vissen
         return false if new_value == @value
         @value = new_value
         taint!
-        true
       end
 
       # @return [true] if the value has been written to since the last call to

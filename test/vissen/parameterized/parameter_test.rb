@@ -149,5 +149,23 @@ describe Vissen::Parameterized::Parameter do
                      "real:{#{target}}>", parameter.inspect
       end
     end
+
+    describe '#tainted?' do
+      let(:parameter_a) { subject.new value_klass }
+      let(:parameter_b) { subject.new value_klass }
+
+      before do
+        parameter_a.bind target
+        parameter_b.bind parameter_a
+      end
+
+      it 'works with multiple levels' do
+        assert parameter_b.tainted?
+        assert_equal target.value, parameter_b.value
+
+        target.write 24
+        assert_equal target.value, parameter_b.value
+      end
+    end
   end
 end

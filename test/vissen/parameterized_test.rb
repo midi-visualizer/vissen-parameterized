@@ -6,6 +6,7 @@ describe Vissen::Parameterized do
   subject { TestHelper::ParameterizedMock }
 
   let(:real_class) { Vissen::Parameterized::Value::Real }
+  let(:vec_class)  { Vissen::Parameterized::Value::Vec }
   let(:param_a)    { Vissen::Parameterized::Parameter.new real_class }
   let(:param_b)    { Vissen::Parameterized::Parameter.new real_class }
   let(:target)     { real_class.new 3 }
@@ -125,13 +126,69 @@ describe Vissen::Parameterized do
       refute @called
     end
 
-    it 'works when chaining multiple objects' do
+    it 'works when chaining two objects' do
       root = subject.new parameters: { c: parameterized },
                          output: real_class.new
       root.define_singleton_method(:call) { |params| -params.c }
 
       assert root.tainted?
       assert_equal(-3, root.value)
+
+      root.untaint!
+
+      param_a.set 2
+      assert root.tainted?
+      assert_equal(-4, root.value)
+    end
+
+    it 'works when chaining many objects' do
+      c = Vissen::Parameterized::Parameter.new real_class
+      root =
+        5.times.reduce(parameterized) do |a, _|
+          node = subject.new parameters: { a: a, c: c }, output: real_class.new
+          node.define_singleton_method(:call) { |p| 2 * (p.a + p.c) }
+          node
+        end
+
+      assert root.tainted?
+      assert_equal(96, root.value)
+
+      root.untaint!
+
+      param_b.set 1
+      assert root.tainted?
+      assert_equal(64, root.value)
+
+      root.untaint!
+
+      c.set 2
+      assert root.tainted?
+      assert_equal(188, root.value)
+    end
+
+    # This test reproduces a bug that was discovered when using the library
+    # elsewhere.
+    it 'reproduces a certain bug' do
+      real_param_a = Vissen::Parameterized::Parameter.new real_class
+      real_param_b = Vissen::Parameterized::Parameter.new real_class
+      vec_param = Vissen::Parameterized::Parameter.new vec_class
+
+      real = subject.new parameters: { vec: vec_param },
+                         output: real_class.new
+      real.define_singleton_method(:call) { |p| p.vec[0] + p.vec[1] }
+
+      vec = subject.new parameters: { a: real_param_a, b: real_param_b },
+                        output: vec_class.new
+      vec.define_singleton_method(:call) { |p| [p.a, p.b] }
+
+      real.bind(:vec, vec)
+      real.tainted?
+      real.untaint!
+
+      vec.set :a, 0.5
+
+      assert real.tainted?
+      assert_equal 0.5, real.value
     end
   end
 
