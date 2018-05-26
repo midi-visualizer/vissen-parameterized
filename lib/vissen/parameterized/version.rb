@@ -5,6 +5,6 @@ module Vissen
     # The version number of the Parameterized library.
     #
     # @return [String] a semantic version number.
-    VERSION = '0.1.0'
+    VERSION = '0.1.1'
   end
 end
