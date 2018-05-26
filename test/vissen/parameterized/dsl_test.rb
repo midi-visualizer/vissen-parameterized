@@ -28,37 +28,57 @@ describe Vissen::Parameterized::DSL do
   describe 'custom value types' do
     describe '.bool' do
       it 'cretes a boolean parameter' do
-        subject.bool :bool, default: true
+        subject.bool :bool
         parameters = subject.class_parameters
         assert parameters[:bool]
-        assert_same true, parameters[:bool].value
+        assert_same false, parameters[:bool].value
+      end
+
+      it 'accepts a default' do
+        subject.bool :bool, default: true
+        assert_same true, subject.class_parameters[:bool].value
       end
     end
 
     describe '.int' do
       it 'cretes an integer parameter' do
-        subject.int :int, default: 42
+        subject.int :int
         parameters = subject.class_parameters
         assert parameters[:int]
-        assert_same 42, parameters[:int].value
+        assert_same 0, parameters[:int].value
+      end
+
+      it 'accepts a default' do
+        subject.int :int, default: 42
+        assert_same 42, subject.class_parameters[:int].value
       end
     end
 
     describe '.real' do
       it 'cretes a real parameter' do
-        subject.real :real, default: 4.2
+        subject.real :real
         parameters = subject.class_parameters
         assert parameters[:real]
-        assert_same 4.2, parameters[:real].value
+        assert_same 0.0, parameters[:real].value
+      end
+
+      it 'accepts a default' do
+        subject.real :real, default: 4.2
+        assert_same 4.2, subject.class_parameters[:real].value
       end
     end
 
     describe '.vec' do
       it 'cretes a vec parameter' do
-        subject.vec :vec, default: [4.2, 1.0]
+        subject.vec :vec
         parameters = subject.class_parameters
         assert parameters[:vec]
-        assert_equal [4.2, 1.0], parameters[:vec].value
+        assert_equal [0.0, 0.0], parameters[:vec].value
+      end
+
+      it 'accepts a default' do
+        subject.vec :vec, default: [4.2, 1.0]
+        assert_equal [4.2, 1.0], subject.class_parameters[:vec].value
       end
     end
   end
