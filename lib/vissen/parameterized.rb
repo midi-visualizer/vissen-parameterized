@@ -112,7 +112,6 @@ module Vissen
         end
 
       return false unless params_tainted
-
       @_value.write call(@_accessor)
     end
 
